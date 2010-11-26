@@ -38,6 +38,9 @@ my $demolished = 0;
     extends qw(MyBigInt);
 }
 
+note 'MyBigInt';
+isnt( MyBigInt->can('new'), Math::BigInt->can('new') );
+
 with_immutable {
     my $i = MyBigInt->new(100, { name => 'foo' });
 
@@ -54,6 +57,7 @@ is $demolished, 2;
 $built      = 0;
 $demolished = 0;
 
+note 'MyBigInt2';
 with_immutable {
     my $i = MyBigInt2->new(42);
 

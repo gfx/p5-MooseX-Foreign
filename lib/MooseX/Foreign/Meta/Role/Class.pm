@@ -2,6 +2,7 @@ package MooseX::Foreign::Meta::Role::Class;
 use warnings FATAL => 'all';
 use Moose::Role;
 use Moose::Util::MetaRole;
+use Data::Util;
 
 has 'foreign_superclass' => (
     is  => 'rw',
@@ -22,24 +23,35 @@ sub find_foreign_superclass {
 around superclasses => sub {
     my($next, $self, @args) = @_;
 
-    my @isa = $self->$next(@args);
-    foreach my $super(@args) {
-        next if $super->isa('Moose::Object');
-        if( $super->can('new') or $super->can('DESTROY') ) {
-            $self->inherit_from_foreign_class($super);
+    return $self->$next() unless @args;
+
+    my $is_a_moose_object = 0;
+
+    my $supers = Data::Util::mkopt(\@args);
+    foreach my $super(@{$supers}) {
+        my($class, $opt) = @{$super};
+        Class::MOP::load_class($class);
+
+        if( $class->isa('Moose::Object') ) {
+            $is_a_moose_object++;
+
+            my $meta = Class::MOP::get_metaclass_by_name($class);
+            if(defined $meta and $meta->can('does')
+                    and $meta->does(__PACKAGE__)) {
+                $self->inherit_from_foreign_class($class);
+            }
+        }
+        elsif( $class->can('new') or $class->can('DESTROY') ) {
+            $self->inherit_from_foreign_class($class);
         }
     }
-    return @isa;
-};
 
-#before verify_superclass => sub {
-#    my($self, $super, $super_meta) = @_;
-#
-#    if(defined($super_meta) && $super_meta->does(__PACKAGE__)) {
-#        $self->inherit_from_foreign_class($super);
-#    }
-#    return;
-#};
+    if(!$is_a_moose_object) {
+        push @args, 'Moose::Object';
+    }
+
+    return $self->$next(@args);
+};
 
 sub inherit_from_foreign_class { # override
     my($self, $foreign_super) = @_;
@@ -67,21 +79,22 @@ sub inherit_from_foreign_class { # override
 
         # DON'T CREATE INSTANCES BEFORE CALLING make_immutable()
         $self->add_method(
-            new => sub { # provided for compatibility
+            new => sub { # provided for consistency
                 my $constructor = $self->constructor_class->new(
                     options      => {},
                     metaclass    => $self,
-                    is_inline    => 0,
+                    is_inline    => 1,
                     package_name => $self->name,
                     name         => 'new',
                 );
                 $constructor->execute(@_);
-         });
+        });
         $self->add_method(
-            DESTROY => sub {
+            DESTROY => sub { # provided for consistency
                 my $destructor = $self->destructor_class->new(
                     options      => {},
                     metaclass    => $self,
+                    is_inline    => 1,
                     package_name => $self->name,
                     name         => 'DESTROY',
                 );

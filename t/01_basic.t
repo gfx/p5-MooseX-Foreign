@@ -45,6 +45,7 @@ with_immutable {
 
     isa_ok $p, 'MyPerson';
     isa_ok $p, 'Person';
+    isa_ok $p, 'Moose::Object';
 
     is $p->name,        'Goro Fuji', 'from the base class';
     is $p->age,          27,         'from the base class';
