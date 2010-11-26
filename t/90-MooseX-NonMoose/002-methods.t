@@ -10,16 +10,16 @@ sub foo { 'Foo' }
 sub bar { 'Foo' }
 sub baz { ref(shift) }
 
-package Foo::Mouse;
-use Mouse;
-use MouseX::Foreign;
+package Foo::Moose;
+use Moose;
+use MooseX::Foreign;
 extends 'Foo';
 
-sub bar { 'Foo::Mouse' }
+sub bar { 'Foo::Moose' }
 
 package main;
 
-my $foo_moose = Foo::Mouse->new;
-is($foo_moose->foo, 'Foo', 'Foo::Mouse->foo');
-is($foo_moose->bar, 'Foo::Mouse', 'Foo::Mouse->bar');
-is($foo_moose->baz, 'Foo::Mouse', 'Foo::Mouse->baz');
+my $foo_moose = Foo::Moose->new;
+is($foo_moose->foo, 'Foo', 'Foo::Moose->foo');
+is($foo_moose->bar, 'Foo::Moose', 'Foo::Moose->bar');
+is($foo_moose->baz, 'Foo::Moose', 'Foo::Moose->baz');

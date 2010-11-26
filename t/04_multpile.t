@@ -11,22 +11,22 @@ use Test::More;
 }
 
 package Baz;
-use Mouse;
-use MouseX::Foreign;
+use Moose;
+use MooseX::Foreign;
 eval { extends qw(Foo Bar) };
 ::like $@, qr/Multiple inheritance from foreign classes /;
 
 package XFoo;
-use Mouse;
-use MouseX::Foreign qw(Foo);
+use Moose;
+use MooseX::Foreign qw(Foo);
 
 package XBar;
-use Mouse;
-use MouseX::Foreign qw(Bar);
+use Moose;
+use MooseX::Foreign qw(Bar);
 
 package Qux;
-use Mouse;
-use MouseX::Foreign;
+use Moose;
+use MooseX::Foreign;
 eval { extends qw(XFoo XBar) };
 ::like $@, qr/Multiple inheritance from foreign classes /;
 

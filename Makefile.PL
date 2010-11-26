@@ -2,9 +2,9 @@ use strict;
 use warnings;
 use inc::Module::Install;
 
-all_from 'lib/MouseX/Foreign.pm';
+all_from 'lib/MooseX/Foreign.pm';
 
-requires 'Mouse' => 0.77;
+requires 'Moose' => 0.77;
 
 test_requires 'Test::More' => 0.88; # done_testing()
 test_requires 'Test::Requires';
@@ -15,7 +15,7 @@ author_tests 'xt';
 auto_set_repository() if -d '.git';
 
 clean_files qw(
-    MouseX-Foreign-*
+    MooseX-Foreign-*
     *.stackdump
     cover_db
     nytprof

@@ -16,9 +16,9 @@ sub foo {
     $self->{foo} = shift;
 }
 
-package Foo::Mouse;
-use Mouse;
-use MouseX::Foreign;
+package Foo::Moose;
+use Moose;
+use MooseX::Foreign;
 extends 'Foo';
 
 has bar => (
@@ -27,7 +27,7 @@ has bar => (
 
 package main;
 
-my $foo_moose = Foo::Mouse->new(foo => 'FOO', bar => 'BAR');
+my $foo_moose = Foo::Moose->new(foo => 'FOO', bar => 'BAR');
 is($foo_moose->foo, 'FOO', 'foo set in constructor');
 is($foo_moose->bar, 'BAR', 'bar set in constructor');
 $foo_moose->foo('BAZ');

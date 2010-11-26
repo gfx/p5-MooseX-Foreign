@@ -4,7 +4,7 @@ use warnings;
 use Test::More tests => 12;
 
 package Foo;
-use Mouse;
+use Moose;
 
 has foo => (
     is      => 'ro',
@@ -12,8 +12,8 @@ has foo => (
 );
 
 package Foo::Sub;
-use Mouse;
-use MouseX::Foreign;
+use Moose;
+use MooseX::Foreign;
 extends 'Foo';
 
 package main;
@@ -32,8 +32,8 @@ ok(Foo::Sub->meta->has_method('new'),
    'Foo::Sub has its own new method (immutable)');
 
 package Foo::OtherSub;
-use Mouse;
-use MouseX::Foreign;
+use Moose;
+use MooseX::Foreign;
 extends 'Foo';
 
 package main;

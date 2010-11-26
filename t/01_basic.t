@@ -4,7 +4,7 @@ use strict;
 use Test::More;
 use Test::Exception;
 
-use Test::Mouse;
+use Test::Moose;
 
 my $person_destroyed = 0;
 my $myperson_built   = 0;
@@ -22,8 +22,8 @@ BEGIN{
 
 {
     package MyPerson;
-    use Mouse;
-    use MouseX::Foreign qw(Person);
+    use Moose;
+    use MooseX::Foreign qw(Person);
 
     has handle_name => (
         is => 'rw',
@@ -32,6 +32,13 @@ BEGIN{
 
     sub BUILD { $myperson_built++ }
 }
+
+does_ok(MyPerson->meta, 'MooseX::Foreign::Meta::Role::Class');
+
+does_ok(MyPerson->meta->constructor_class,
+    'MooseX::Foreign::Meta::Role::Method::Constructor');
+does_ok(MyPerson->meta->destructor_class,
+    'MooseX::Foreign::Meta::Role::Method::Destructor');
 
 with_immutable {
     my $p = MyPerson->new(name => 'Goro Fuji', age => 27, handle_name => 'gfx');

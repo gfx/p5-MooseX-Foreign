@@ -12,9 +12,9 @@ sub new {
 
 sub name { shift->{name} }
 
-package Foo::Mouse;
-use Mouse;
-use MouseX::Foreign;
+package Foo::Moose;
+use Moose;
+use MooseX::Foreign;
 extends 'Foo';
 
 has foo => (
@@ -30,10 +30,10 @@ sub BUILDARGS {
 
 package main;
 
-my $foo = Foo::Mouse->new('bar', foo => 'baz');
+my $foo = Foo::Moose->new('bar', foo => 'baz');
 is($foo->name, 'bar', 'superclass constructor gets the right args');
 is($foo->foo,  'baz', 'subclass constructor gets the right args');
-Foo::Mouse->meta->make_immutable;
-$foo = Foo::Mouse->new('bar', foo => 'baz');
+Foo::Moose->meta->make_immutable;
+$foo = Foo::Moose->new('bar', foo => 'baz');
 is($foo->name, 'bar', 'superclass constructor gets the right args (immutable)');
 is($foo->foo,  'baz', 'subclass constructor gets the right args (immutable)');

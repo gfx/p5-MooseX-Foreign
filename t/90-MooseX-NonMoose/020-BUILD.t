@@ -10,9 +10,9 @@ sub new {
     bless { foo => 'FOO' }, $class;
 }
 
-package Foo::Mouse;
-use Mouse;
-use MouseX::Foreign;
+package Foo::Moose;
+use Moose;
+use MooseX::Foreign;
 extends 'Foo';
 
 has class => (
@@ -31,9 +31,9 @@ sub BUILD {
     $self->accum($self->accum . 'a');
 }
 
-package Foo::Mouse::Sub;
-use Mouse;
-extends 'Foo::Mouse';
+package Foo::Moose::Sub;
+use Moose;
+extends 'Foo::Moose';
 
 has bar => (
     is => 'rw',
@@ -46,11 +46,11 @@ sub BUILD {
 }
 
 package main;
-my $foo_moose = Foo::Mouse->new;
-is($foo_moose->class, 'Foo::Mouse', 'BUILD method called properly');
+my $foo_moose = Foo::Moose->new;
+is($foo_moose->class, 'Foo::Moose', 'BUILD method called properly');
 is($foo_moose->accum, 'a', 'BUILD method called properly');
 
-my $foo_moose_sub = Foo::Mouse::Sub->new;
-is($foo_moose_sub->class, 'Foo::Mouse::Sub', 'parent BUILD method called');
+my $foo_moose_sub = Foo::Moose::Sub->new;
+is($foo_moose_sub->class, 'Foo::Moose::Sub', 'parent BUILD method called');
 is($foo_moose_sub->bar, 'BAR', 'child BUILD method called');
 is($foo_moose_sub->accum, 'ab', 'BUILD methods called in the correct order');

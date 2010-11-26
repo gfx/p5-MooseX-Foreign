@@ -1,10 +1,10 @@
 #!perl -w
 use strict;
-use Test::Requires qw(Moose);
+use Test::Requires qw(Mouse);
 use Test::More;
 use Test::Exception;
 
-use Test::Mouse;
+use Test::Moose;
 
 my $person_build      = 0;
 my $person_demolish   = 0;
@@ -12,7 +12,7 @@ my $myperson_build    = 0;
 my $myperson_demolish = 0;
 BEGIN{
     package Person;
-    use Moose;
+    use Mouse;
 
     has name => (is => 'rw');
     has age  => (is => 'rw');
@@ -25,8 +25,8 @@ BEGIN{
 
 {
     package MyPerson;
-    use Mouse;
-    use MouseX::Foreign qw(Person);
+    use Moose;
+    use MooseX::Foreign qw(Person);
 
     has handle_name => (
         is => 'rw',

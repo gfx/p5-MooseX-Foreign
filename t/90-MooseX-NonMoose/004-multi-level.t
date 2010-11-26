@@ -12,9 +12,9 @@ sub new {
 
 sub foo { shift->{foo} }
 
-package Foo::Mouse;
-use Mouse;
-use MouseX::Foreign;
+package Foo::Moose;
+use Moose;
+use MooseX::Foreign;
 extends 'Foo';
 
 has bar => (
@@ -22,9 +22,9 @@ has bar => (
     default => 'BAR',
 );
 
-package Foo::Mouse::Sub;
-use Mouse;
-extends 'Foo::Mouse';
+package Foo::Moose::Sub;
+use Moose;
+extends 'Foo::Moose';
 
 has baz => (
     is      => 'ro',
@@ -32,25 +32,25 @@ has baz => (
 );
 
 package main;
-my $foo_moose = Foo::Mouse->new;
-is($foo_moose->foo, 'FOO', 'Foo::Mouse::foo');
-is($foo_moose->bar, 'BAR', 'Foo::Mouse::bar');
-isnt(Foo::Mouse->meta->get_method('new'), undef,
-     'Foo::Mouse gets its own constructor');
+my $foo_moose = Foo::Moose->new;
+is($foo_moose->foo, 'FOO', 'Foo::Moose::foo');
+is($foo_moose->bar, 'BAR', 'Foo::Moose::bar');
+isnt(Foo::Moose->meta->get_method('new'), undef,
+     'Foo::Moose gets its own constructor');
 
-my $foo_moose_sub = Foo::Mouse::Sub->new;
-is($foo_moose_sub->foo, 'FOO', 'Foo::Mouse::Sub::foo');
-is($foo_moose_sub->bar, 'BAR', 'Foo::Mouse::Sub::bar');
-is($foo_moose_sub->baz, 'BAZ', 'Foo::Mouse::Sub::baz');
-is(Foo::Mouse::Sub->meta->get_method('new'), undef,
-   'Foo::Mouse::Sub just uses the constructor for Foo::Mouse');
+my $foo_moose_sub = Foo::Moose::Sub->new;
+is($foo_moose_sub->foo, 'FOO', 'Foo::Moose::Sub::foo');
+is($foo_moose_sub->bar, 'BAR', 'Foo::Moose::Sub::bar');
+is($foo_moose_sub->baz, 'BAZ', 'Foo::Moose::Sub::baz');
+is(Foo::Moose::Sub->meta->get_method('new'), undef,
+   'Foo::Moose::Sub just uses the constructor for Foo::Moose');
 
-Foo::Mouse->meta->make_immutable;
-Foo::Mouse::Sub->meta->make_immutable;
+Foo::Moose->meta->make_immutable;
+Foo::Moose::Sub->meta->make_immutable;
 
-$foo_moose_sub = Foo::Mouse::Sub->new;
-is($foo_moose_sub->foo, 'FOO', 'Foo::Mouse::Sub::foo (immutable)');
-is($foo_moose_sub->bar, 'BAR', 'Foo::Mouse::Sub::bar (immutable)');
-is($foo_moose_sub->baz, 'BAZ', 'Foo::Mouse::Sub::baz (immutable)');
-isnt(Foo::Mouse::Sub->meta->get_method('new'), undef,
-     'Foo::Mouse::Sub has an inlined constructor');
+$foo_moose_sub = Foo::Moose::Sub->new;
+is($foo_moose_sub->foo, 'FOO', 'Foo::Moose::Sub::foo (immutable)');
+is($foo_moose_sub->bar, 'BAR', 'Foo::Moose::Sub::bar (immutable)');
+is($foo_moose_sub->baz, 'BAZ', 'Foo::Moose::Sub::baz (immutable)');
+isnt(Foo::Moose::Sub->meta->get_method('new'), undef,
+     'Foo::Moose::Sub has an inlined constructor');

@@ -3,6 +3,6 @@
 use strict;
 use Test::More tests => 1;
 
-BEGIN { require_ok 'MouseX::Foreign' }
+BEGIN { require_ok 'MooseX::Foreign' }
 
-diag "Testing MouseX::Foreign/$MouseX::Foreign::VERSION";
+diag "Testing MooseX::Foreign/$MooseX::Foreign::VERSION";

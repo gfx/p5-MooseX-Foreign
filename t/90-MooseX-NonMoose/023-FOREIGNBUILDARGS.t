@@ -12,9 +12,9 @@ sub new {
 
 sub foo_base { shift->{foo_base} }
 
-package Foo::Mouse;
-use Mouse;
-use MouseX::Foreign;
+package Foo::Moose;
+use Moose;
+use MooseX::Foreign;
 extends 'Foo';
 
 has foo => (
@@ -27,9 +27,9 @@ sub FOREIGNBUILDARGS {
     return "$args{foo}_base";
 }
 
-package Bar::Mouse;
-use Mouse;
-use MouseX::Foreign;
+package Bar::Moose;
+use Moose;
+use MooseX::Foreign;
 extends 'Foo';
 
 has bar => (
@@ -46,9 +46,9 @@ sub BUILDARGS {
     return { bar => shift };
 }
 
-package Baz::Mouse;
-use Mouse;
-extends 'Bar::Mouse';
+package Baz::Moose;
+use Moose;
+extends 'Bar::Moose';
 
 has baz => (
     is => 'rw',
@@ -56,24 +56,24 @@ has baz => (
 
 package main;
 
-my $foo = Foo::Mouse->new(foo => 'bar');
+my $foo = Foo::Moose->new(foo => 'bar');
 is($foo->foo,  'bar', 'subclass constructor gets the right args');
 is($foo->foo_base,  'bar_base', 'subclass constructor gets the right args');
-my $bar = Bar::Mouse->new('baz');
+my $bar = Bar::Moose->new('baz');
 is($bar->bar, 'baz', 'subclass constructor gets the right args');
 is($bar->foo_base, 'baz_base', 'subclass constructor gets the right args');
-my $baz = Baz::Mouse->new('bazbaz');
+my $baz = Baz::Moose->new('bazbaz');
 is($baz->bar, 'bazbaz', 'extensions of extensions of the nonmoose class respect BUILDARGS');
 is($baz->foo_base, 'bazbaz_base', 'extensions of extensions of the nonmoose class respect FOREIGNBUILDARGS');
-Foo::Mouse->meta->make_immutable;
-Bar::Mouse->meta->make_immutable;
-Baz::Mouse->meta->make_immutable;
-$foo = Foo::Mouse->new(foo => 'bar');
+Foo::Moose->meta->make_immutable;
+Bar::Moose->meta->make_immutable;
+Baz::Moose->meta->make_immutable;
+$foo = Foo::Moose->new(foo => 'bar');
 is($foo->foo,  'bar', 'subclass constructor gets the right args (immutable)');
 is($foo->foo_base,  'bar_base', 'subclass constructor gets the right args (immutable)');
-$bar = Bar::Mouse->new('baz');
+$bar = Bar::Moose->new('baz');
 is($bar->bar, 'baz', 'subclass constructor gets the right args (immutable)');
 is($bar->foo_base, 'baz_base', 'subclass constructor gets the right args (immutable)');
-$baz = Baz::Mouse->new('bazbaz');
+$baz = Baz::Moose->new('bazbaz');
 is($baz->bar, 'bazbaz', 'extensions of extensions of the nonmoose class respect BUILDARGS (immutable)');
 is($baz->foo_base, 'bazbaz_base', 'extensions of extensions of the nonmoose class respect FOREIGNBUILDARGS (immutable)');

@@ -1,10 +1,11 @@
-package MouseX::Foreign;
+package MooseX::Foreign;
 use 5.008_001;
-use Mouse::Util; # turns on strict and warnings
+use strict;
+use warnings;
 
 our $VERSION = '0.003';
 
-use Mouse::Util::MetaRole;
+use Moose::Util::MetaRole;
 use Carp ();
 
 sub import {
@@ -14,13 +15,13 @@ sub import {
     if(!$caller->can('meta')){
         Carp::croak(
               "$caller does not have the meta method"
-            . " (did you use Mouse for $caller?)");
+            . " (did you use Moose for $caller?)");
     }
 
-    Mouse::Util::MetaRole::apply_metaroles(
+    Moose::Util::MetaRole::apply_metaroles(
         for => $caller,
         class_metaroles => {
-            class => ['MouseX::Foreign::Meta::Role::Class'],
+            class => ['MooseX::Foreign::Meta::Role::Class'],
         },
     );
 
@@ -33,17 +34,17 @@ __END__
 
 =head1 NAME
 
-MouseX::Foreign - Extends non-Mouse classes as well as Mouse classes
+MooseX::Foreign - Extends non-Moose classes as well as Moose classes
 
 =head1 VERSION
 
-This document describes MouseX::Foreign version 0.003.
+This document describes MooseX::Foreign version 0.003.
 
 =head1 SYNOPSIS
 
     package MyInt;
-    use Mouse;
-    use MouseX::Foreign qw(Math::BigInt);
+    use Moose;
+    use MooseX::Foreign qw(Math::BigInt);
 
     has name => (
         is  => 'ro',
@@ -53,8 +54,8 @@ This document describes MouseX::Foreign version 0.003.
 =head1 DESCRIPTION
 
 
-MouseX::Foreign provides an ability for Mouse classes to extend any classes,
-including non-Mouse classes, including Moose classes.
+MooseX::Foreign provides an ability for Moose classes to extend any classes,
+including non-Moose classes, including Moose classes.
 
  
 =head1 DEPENDENCIES
@@ -69,11 +70,11 @@ to cpan-RT.
 
 =head1 ACKNOWLEDGEMENT
 
-This is a Mouse port of MooseX::NonMoose, although the name is different.
+This is a Moose port of MooseX::NonMoose, although the name is different.
 
 =head1 SEE ALSO
 
-L<Mouse>
+L<Moose>
 
 L<Moose>
 

@@ -12,18 +12,18 @@ sub new { bless {}, shift }
 sub DESTROY { $destroyed++ }
 
 package Foo::Sub;
-use Mouse;
-use MouseX::Foreign;
+use Moose;
+use MooseX::Foreign;
 extends 'Foo';
 
 sub DEMOLISH { $demolished++ }
 
 package main;
 { Foo::Sub->new }
-is($destroyed, 1, "non-Mouse destructor called");
-is($demolished, 1, "Mouse destructor called");
+is($destroyed, 1, "non-Moose destructor called");
+is($demolished, 1, "Moose destructor called");
 Foo::Sub->meta->make_immutable;
 ($destroyed, $demolished) = (0, 0);
 { Foo::Sub->new }
-is($destroyed, 1, "non-Mouse destructor called (immutable)");
-is($demolished, 1, "Mouse destructor called (immutable)");
+is($destroyed, 1, "non-Moose destructor called (immutable)");
+is($demolished, 1, "Moose destructor called (immutable)");

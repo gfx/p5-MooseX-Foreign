@@ -19,9 +19,9 @@ sub foo {
 sub baz  { 'Foo' }
 sub quux { ref(shift) }
 
-package Foo::Mouse;
-use Mouse;
-use MouseX::Foreign;
+package Foo::Moose;
+use Moose;
+use MooseX::Foreign;
 extends 'Foo';
 
 has bar => (
@@ -32,7 +32,7 @@ __PACKAGE__->meta->make_immutable;
 
 package main;
 
-my $foo_moose = Foo::Mouse->new(foo => 'FOO', bar => 'BAR');
+my $foo_moose = Foo::Moose->new(foo => 'FOO', bar => 'BAR');
 is($foo_moose->foo, 'FOO', 'foo set in constructor');
 is($foo_moose->bar, 'BAR', 'bar set in constructor');
 $foo_moose->foo('BAZ');
@@ -40,4 +40,4 @@ $foo_moose->bar('QUUX');
 is($foo_moose->foo, 'BAZ', 'foo set by accessor');
 is($foo_moose->bar, 'QUUX', 'bar set by accessor');
 is($foo_moose->baz, 'Foo', 'baz method');
-is($foo_moose->quux, 'Foo::Mouse', 'quux method');
+is($foo_moose->quux, 'Foo::Moose', 'quux method');

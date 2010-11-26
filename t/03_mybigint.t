@@ -3,14 +3,14 @@
 use strict;
 use Test::More;
 use Test::Exception;
-use Test::Mouse;
+use Test::Moose;
 
 my $built      = 0;
 my $demolished = 0;
 {
     package MyBigInt;
-    use Mouse;
-    use MouseX::Foreign;
+    use Moose;
+    use MooseX::Foreign;
     extends qw(Math::BigInt);
 
     has name => (
@@ -34,7 +34,7 @@ my $demolished = 0;
     sub DEMOLISH{ $demolished++ }
 
     package MyBigInt2;
-    use Mouse;
+    use Moose;
     extends qw(MyBigInt);
 }
 
